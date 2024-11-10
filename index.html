@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Image & Hindi Joke</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .image-container {
+            margin-bottom: 20px;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .joke-container {
+            font-size: 18px;
+            color: #555;
+            background-color: #fafafa;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Dog Image & Joke</h1>
+        <div class="image-container">
+            <img id="dogImage" src="" alt="Random Dog Image">
+        </div>
+        <div class="joke-container">
+            <p id="joke">Press the button to get a joke and a dog image!</p>
+        </div>
+        <button id="fetchData">Get Dog & Joke</button>
+    </div>
+
+    <script>
+        document.getElementById('fetchData').addEventListener('click', loadData);
+
+        function loadData() {
+            const jokeElement = document.getElementById('joke');
+            const dogImage = document.getElementById('dogImage');
+            
+            // Fetching a random dog image
+            fetch('https://dog.ceo/api/breeds/image/random')
+                .then(response => response.json())
+                .then(data => {
+                    const dogImageUrl = data.message;
+                    dogImage.src = dogImageUrl;
+                })
+                .catch(error => {
+                    console.error('There was an issue fetching the dog image:', error);
+                    dogImage.src = '';
+                });
+
+            // Fetching a random Hindi joke
+            fetch('https://v2.jokeapi.dev/joke/Any?lang=hi&type=single')  // Joke in Hindi
+                .then(response => response.json())
+                .then(data => {
+                    if (data.type === 'single') {
+                        jokeElement.textContent = data.joke;
+                    }
+                })
+                .catch(error => {
+                    jokeElement.textContent = 'Oops! Something went wrong while fetching the joke.';
+                    console.error('There was an issue fetching the joke:', error);
+                });
+        }
+    </script>
+
+</body>
+</html>
